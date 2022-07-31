@@ -1,0 +1,8 @@
+policy "check age" 
+permit action == "read book"
+where 
+   var birthday    = log.infoSpy("birthday     : ", subject.birthday);
+   var today       = log.infoSpy("today        : ", time.dateOf(|<time.now>));
+   var age         = log.infoSpy("age          : ", time.timeBetween(birthday, today, "years"));
+   var ageRating   = log.infoSpy("age rating   : ", resource.ageRating);
+                     log.infoSpy("is older     : ", age >= ageRating );
