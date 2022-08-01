@@ -16,4 +16,5 @@ public class Book {
 	Long id;
 	String name;
 	Integer ageRating;
+	String content;
 }
