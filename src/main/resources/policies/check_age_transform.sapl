@@ -4,7 +4,11 @@ permit action == "read book"
 where 
    var age = timeBetween(subject.birthday, dateOf(|<now>), "years");
    age < resource.ageRating;
+obligation {
+				"type": "logAccess",
+				"message": "Attention, "+subject.username+" accessed the book '"+resource.name+"'."
+           }
 transform
    resource |- {
-		@.content : filter.blacken(3,0,"\u2588")
+        @.content : filter.blacken(3,0,"\u2588")
    }
