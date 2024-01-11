@@ -1,0 +1,14 @@
+import time.*
+policy "filter content in collection"
+permit action == "list books"
+obligation
+	{
+		"type" : "jsonContentFilterPredicate",
+		"conditions" : [
+						{
+							"path" : "$.ageRating",
+							"type" : "<=",
+							"value" : timeBetween(subject.birthday, dateOf(|<now>), "years")
+						}
+					   ]
+	}
