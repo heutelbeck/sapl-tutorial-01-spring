@@ -14,16 +14,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BookController {
 
-	private final BookRepository repository;
+    private final BookRepository repository;
 
-	@GetMapping("/api/books")
-	Iterable<Book> findAll() {
-		return repository.findAll();
-	}
+    @GetMapping("/api/books")
+    Iterable<Book> findAll() {
+        return repository.findAll();
+    }
 
-	@GetMapping("/api/books/{id}")
-	Optional<Book> findById(@PathVariable Long id) {
-		return repository.findById(id);
-	}
+    @GetMapping("/api/books/{id}")
+    Optional<Book> findById(@PathVariable Long id) {
+        return repository.findById(id);
+    }
 
 }

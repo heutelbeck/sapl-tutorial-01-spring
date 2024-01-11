@@ -1,4 +1,4 @@
 {
-	"algorithm": "DENY_OVERRIDES",
+	"algorithm": "DENY_UNLESS_PERMIT",
 	"variables": {}
 }

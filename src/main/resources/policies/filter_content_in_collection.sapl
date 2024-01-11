@@ -1,0 +1,8 @@
+import time.*
+policy "filter content in collection"
+permit action == "list books"
+obligation
+	{
+		"type" : "filterBooksByAge",
+		"age"  : timeBetween(subject.birthday, dateOf(|<now>), "years")
+	}

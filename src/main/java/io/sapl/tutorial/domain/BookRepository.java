@@ -7,7 +7,7 @@ import io.sapl.spring.method.metadata.PreEnforce;
 
 public interface BookRepository {
 	
-	@PreEnforce
+	@PreEnforce(subject = "authentication.getPrincipal()", action="'list books'")
 	Iterable<Book> findAll();
 
 	@PostEnforce(subject = "authentication.getPrincipal()", action = "'read book'", resource = "returnObject")
