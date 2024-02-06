@@ -16,7 +16,7 @@ public class FilterByAgeProvider implements FilterPredicateConstraintHandlerProv
     public boolean isResponsible(JsonNode constraint) {
         return constraint != null && constraint.has("type")
                 && "filterBooksByAge".equals(constraint.findValue("type").asText()) && constraint.has("age")
-                && constraint.get("age").isInt();
+                && constraint.get("age").isNumber();
     }
 
     @Override
