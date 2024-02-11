@@ -313,7 +313,7 @@ public class DemoData implements CommandLineRunner {
 		bookRepository.save(new Book(2L, "The Rescue Mission: (Pokemon: Kalos Reader #1)",             4));
 		bookRepository.save(new Book(3L, "Dragonlance Chronicles Vol. 1: Dragons of Autumn Twilight",  9));
 		bookRepository.save(new Book(4L, "The Three-Body Problem",                                    14));
-		// @formatter:on
+	// @formatter:on
     }
 
     private static LocalDate birthdayForAgeInYears(int age) {
@@ -1157,7 +1157,7 @@ First, complete the `@PreEnforce` on `findAll` in the `BookRepository` as follow
 public interface BookRepository {
     
     @PreEnforce(subject = "authentication.getPrincipal()",
-		        action="'list books'")
+                action="'list books'")
     Iterable<Book> findAll();
 
     @PostEnforce(subject  = "authentication.getPrincipal()", 
