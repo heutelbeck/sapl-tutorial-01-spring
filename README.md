@@ -16,7 +16,7 @@ Attribute-based Access Control (ABAC) is an expressive access control model. A s
 
 <!--more-->
 
-![abac.png](.attachments.594717/abac.png)
+![abac.png](./abac.png)
 
 ABAC decides whether to grant access by checking the attributes of the subject, the resource, the action and the environment.
 
@@ -36,7 +36,7 @@ ABAC allows the implementation of fine-grained access control rules and flexible
 
 SAPL implements its interpretation of ABAC called Attribute Stream-Based Access Control (ASBAC). It uses publish-subscribe as the primary mode of interaction between the individual components. This tutorial explains the basic ideas. The [SAPL Documentation](https://sapl.io/docs/latest/sapl-reference.html) provides a more complete discussion of the architecture.
 
-![sapl-architecture.png](.attachments.594717/sapl-architecture.png)
+![sapl-architecture.png](./sapl-architecture.png)
 
 In your application, there will be multiple code paths where a subject attempts to perform some action on a resource, and based on the requirements of the domain, the action must be authorized. For example, all actions triggered by users or other components must be explicitly authorized in a zero-trust system.
 
@@ -71,7 +71,7 @@ For this tutorial, we will use Maven as our build tool and Java as our language.
 
  Your Initializr settings should now look something like this:
 
-![Spring Initializr.png](.attachments.594717/Spring%20Initializr%20%282%29.png)
+![Spring Initializr.png](./Spring%20Initializr.png)
 
 Now click "GENERATE." Your browser will download the project template as a ".zip" file.
 
