@@ -1,13 +1,3 @@
----
-layout: post
-author: Dominic Heutelbeck
-title: "Implementing Attribute-based Access Control (ABAC) with Spring and SAPL"
-date: 2022-08-04
-tags: abac asbac sapl spring spring-boot tutorial
-categories: tutorials
-excerpt_separator: <!--more-->
----
-
 # Implementing Attribute-based Access Control (ABAC) with Spring and SAPL
 
 ## What is Attribute-based Access Control?
