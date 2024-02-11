@@ -146,7 +146,7 @@ This file completes the basic setup of the Maven project. Now, we can start impl
 
 ## The Project Domain
 
-This tutorial will be applied to a library where books can only be viewed and checked out if the user meets the minimum age specified for the book. If you are already familiar with Spring, JPA, and Spring Security basics, you can skip this section and go directly to [Securing a Service Method with SAPL](#securing-a-service-method-with-sapl).
+This tutorial will be applied to a library where books can only be viewed and checked out if the user meets the minimum age specified for the book. If you are already familiar with Spring, JPA, and Spring Security basics, you can skip this section and go directly to [Securing a Service Method with SAPL](./README.md#securing-repository-methods-with-sapl).
 
 ### Define the Book Entity and Repository
 
