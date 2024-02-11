@@ -24,7 +24,7 @@ ABAC allows the implementation of fine-grained access control rules and flexible
 
 ### The SAPL Attribute-Based Access Control (ABAC) Architecture
 
-SAPL implements its interpretation of ABAC called Attribute Stream-Based Access Control (ASBAC). It uses publish-subscribe as the primary mode of interaction between the individual components. This tutorial explains the basic ideas. The [SAPL Documentation](https://sapl.io/docs/latest/sapl-reference.html) provides a more complete discussion of the architecture.
+SAPL implements its interpretation of ABAC called Attribute Stream-Based Access Control (ASBAC). It uses publish-subscribe as the primary mode of interaction between the individual components. This tutorial explains the basic ideas. The [SAPL Documentation](https://sapl.io/docs/3.0.0-SNAPSHOT-MD/) provides a more complete discussion of the architecture.
 
 ![sapl-architecture.png](./sapl-architecture.png)
 
@@ -146,7 +146,7 @@ This file completes the basic setup of the Maven project. Now, we can start impl
 
 ## The Project Domain
 
-This tutorial will be applied to a library where books can only be viewed and checked out if the user meets the minimum age specified for the book. If you are already familiar with Spring, JPA, and Spring Security basics, you can skip this section and go directly to  [Securing a Service Method with SAPL](#securing-a-service-method-with-sapl).
+This tutorial will be applied to a library where books can only be viewed and checked out if the user meets the minimum age specified for the book. If you are already familiar with Spring, JPA, and Spring Security basics, you can skip this section and go directly to [Securing a Service Method with SAPL](#securing-a-service-method-with-sapl).
 
 ### Define the Book Entity and Repository
 
@@ -159,7 +159,7 @@ First, define a book entity that contains an ID, a name, and a suitable age rati
 @AllArgsConstructor
 public class Book {
     
-	@Id
+    @Id
     Long id;
     String name;
     Integer ageRating;
@@ -647,7 +647,7 @@ The PDP will grant access, and the log will look similar to this:
 
 Note that your system's ordering of the log entries may be slightly different. The log indicates that both policies matched the subscription and that the PDP evaluated them. Then, the combining algorithm resolved the two decisions, i.e., one `permit` and one `deny`, to `permit`.
 
-The PDP uses the `DENY_UNLESS_PERMIT` combining algorithm selected in the `pdp.json` configuration file. This algorithm is relatively permissive because it only returns `deny` if no `permit` is present. The SAPL engine implements alternative algorithms to resolve the presence of different, potentially contradicting, decisions (also see [SAPL Documentation - Combining Algorithm](https://sapl.io/docs/latest/sapl-reference.html#combining-algorithm-2)). For the tutorial domain, select a more restrictive algorithm. Replace `DENY_UNLESS_PERMIT` in the `pdp.json` file with `DENY_OVERRIDES`. This algorithm prioritizes `deny` decisions over `permit`.
+The PDP uses the `DENY_UNLESS_PERMIT` combining algorithm selected in the `pdp.json` configuration file. This algorithm is relatively permissive because it only returns `deny` if no `permit` is present. The SAPL engine implements alternative algorithms to resolve the presence of different, potentially contradicting, decisions (also see [SAPL Documentation - Combining Algorithm](https://sapl.io/docs/3.0.0-SNAPSHOT-MD/6_5_CombiningAlgorithm/)). For the tutorial domain, select a more restrictive algorithm. Replace `DENY_UNLESS_PERMIT` in the `pdp.json` file with `DENY_OVERRIDES`. This algorithm prioritizes `deny` decisions over `permit`.
 
 Now restart the application, authenticate with any user and access <http://localhost:8080/api/books/1> again.
 
@@ -678,7 +678,7 @@ As expected, the combining algorithm gave precedence to the `deny` decision.
 
 Finally, rename `deny_all.sapl` to `deny_all.sapl.off` and `permit_all.sapl` to `permit_all.sapl.off`. Now access to the book should be denied, as the PDP only loads documents with the `.sapl`suffix.
 
-The PDP returns `not applicable` because it did not find a document making a decision explicitly and `DENY_OVERRIDES` does not have a default decision like `DENY_UNLESS_PERMIT`. The PDP may also return `indeterminate` if an error occurred during policy evaluation. In both cases, a PEP must not grant access. Additional information about the different results of a policy evaluation can be found in the [SAPL documentation](https://sapl.io./docs/latest/sapl-reference.html#policy-2).
+The PDP returns `not applicable` because it did not find a document making a decision explicitly and `DENY_OVERRIDES` does not have a default decision like `DENY_UNLESS_PERMIT`. The PDP may also return `indeterminate` if an error occurred during policy evaluation. In both cases, a PEP must not grant access. Additional information about the different results of a policy evaluation can be found in the [SAPL documentation](https://sapl.io./docs/3.0.0-SNAPSHOT-MD/6_2_Policy/).
 
 In this section, you learned how a PEP and PDP interact in SAPL and how the PDP combines outcomes of different policies. In the next step, you will learn how to write more practical policies and when precisely a policy is *applicable*, i.e., matches, for an authorization subscription.
 
@@ -705,7 +705,7 @@ Let's write a policy that says, "Only Bob can see individual book entries". Writ
 policy "only bob may see individual book entries"
 permit action.java.name == "findById" & action.java.declaringTypeName =~ ".*BookRepository$"
 where
-  subject.name == "bob";
+    subject.name == "bob";
 ```
 
 Now restart and log in as Bob. You should see the same error page, including the statement: `There was an unexpected error (type=Forbidden, status=403).` Like at the beginning of the tutorial. Your log should look as follows:
@@ -823,23 +823,23 @@ The resulting authorization subscription will look similar to this:
 
 ```json
 {
-  "subject": {
-    "password": null,
-    "username": "zoe",
-    "authorities": [],
-    "accountNonExpired": true,
-    "accountNonLocked": true,
-    "credentialsNonExpired": true,
-    "enabled": true,
-    "birthday": "2007-01-03"
-  },
-  "action": "read book",
-  "resource": {
-    "id": 1,
-    "name": "Clifford: It's Pool Time!",
-    "ageRating": 0
-  },
-  "environment": null
+    "subject": {
+	"password": null,
+        "username": "zoe",
+        "authorities": [],
+        "accountNonExpired": true,
+        "accountNonLocked": true,
+        "credentialsNonExpired": true,
+        "enabled": true,
+        "birthday": "2007-01-03"
+    },
+    "action": "read book",
+    "resource": {
+        "id": 1,
+        "name": "Clifford: It's Pool Time!",
+        "ageRating": 0
+    },
+    "environment": null
 }
 ```
 
@@ -858,11 +858,11 @@ Create a policy document `check_age_logging.sapl` as follows:
 policy "check age" 
 permit action == "read book"
 where 
-   var birthday    = log.infoSpy("birthday     : ", subject.birthday);
-   var today       = log.infoSpy("today        : ", time.dateOf(|<time.now>));
-   var age         = log.infoSpy("age          : ", time.timeBetween(birthday, today, "years"));
-   var ageRating   = log.infoSpy("age rating   : ", resource.ageRating);
-                     log.infoSpy("is older     : ", age >= ageRating );
+    var birthday    = log.infoSpy("birthday     : ", subject.birthday);
+    var today       = log.infoSpy("today        : ", time.dateOf(|<time.now>));
+    var age         = log.infoSpy("age          : ", time.timeBetween(birthday, today, "years"));
+    var ageRating   = log.infoSpy("age rating   : ", resource.ageRating);
+                      log.infoSpy("is older     : ", age >= ageRating );
 ```
 
 In its *target expression*, the policy `check age` scopes its applicability to all authorization subscriptions with the action `read book`.
@@ -930,8 +930,8 @@ import time.*
 policy "check age compact" 
 permit action == "read book"
 where 
-   var age = timeBetween(subject.birthday, dateOf(|<now>), "years");
-   age >= resource.ageRating;
+    var age = timeBetween(subject.birthday, dateOf(|<now>), "years");
+    age >= resource.ageRating;
 ```
 
 Imports allow the use of a shorter name instead of the fully qualified name of functions or attribute finders stored in libraries within a SAPL policy document.
@@ -988,19 +988,19 @@ import time.*
 policy "check age transform" 
 permit action == "read book"
 where 
-   var age = timeBetween(subject.birthday, dateOf(|<now>), "years");
-   age < resource.ageRating;
+    var age = timeBetween(subject.birthday, dateOf(|<now>), "years");
+    age < resource.ageRating;
 transform
-   resource |- {
+    resource |- {
         @.content : filter.blacken(3,0,"\u2588")
-   }
+    }
 ```
 
 This policy introduces the `transform` expression for the *transformations*.
 
 If the policy is applicable, i.e., all rules evaluate to `true`, whatever JSON value the `transform` expression evaluates to is added to the authorization decision as the property `resource`. The presence of a `resource` object in the authorization decision instructs the PEP to replace the original `resource` data with the one supplied.
 
-In this case, the so-called filter operator `|-` is applied to the `resource` object. The filter operator enables the selection of individual parts of a JSON value for manipulation, e.g., applying a function to the selected value. In this case, the operator selects the `content` key of the resource and replaces it with a version of its content, only exposing the three leftmost characters and replacing the rest with a black square ("\\u2588" in Unicode). The selection expression is very powerful. Please refer to the [SAPL Documentation](https://sapl.io./docs/latest/sapl-reference.html#filtering) for a full explanation.
+In this case, the so-called filter operator `|-` is applied to the `resource` object. The filter operator enables the selection of individual parts of a JSON value for manipulation, e.g., applying a function to the selected value. In this case, the operator selects the `content` key of the resource and replaces it with a version of its content, only exposing the three leftmost characters and replacing the rest with a black square ("\\u2588" in Unicode). The selection expression is very powerful. Please refer to the [SAPL Documentation](https://sapl.io/docs/3.0.0-SNAPSHOT-MD/5_7_SAPLExpressions/#filtering) for a full explanation.
 
 Ensure that the original age-checking policy is still in place. Now, restart and log in as Alice.
 
@@ -1064,16 +1064,17 @@ import time.*
 policy "check age transform" 
 permit action == "read book"
 where 
-   var age = timeBetween(subject.birthday, dateOf(|<now>), "years");
-   age < resource.ageRating;
-obligation {
-				"type": "logAccess",
-				"message": "Attention, "+subject.username+" accessed the book '"+resource.name+"'."
-           }
+    var age = timeBetween(subject.birthday, dateOf(|<now>), "years");
+    age < resource.ageRating;
+obligation
+    {
+        "type": "logAccess",
+	"message": "Attention, "+subject.username+" accessed the book '"+resource.name+"'."
+    }
 transform
-   resource |- {
+    resource |- {
         @.content : filter.blacken(3,0,"\u2588")
-   }
+    }
 ```
 
 Now log in as Alice and attempt to access <http://localhost:8080/api/books/2>.
@@ -1110,22 +1111,21 @@ To support the logging obligation, implement a so-called *constraint handler pro
 @Service
 public class LoggingConstraintHandlerProvider implements RunnableConstraintHandlerProvider {
 
-	@Override
-	public Signal getSignal() {
-		return Signal.ON_DECISION;
-	}
+    @Override
+    public Signal getSignal() {
+	return Signal.ON_DECISION;
+    }
 
-	@Override
-	public boolean isResponsible(JsonNode constraint) {
-		return constraint != null && constraint.has("type")
-				&& "logAccess".equals(constraint.findValue("type").asText());
-	}
+    @Override
+    public boolean isResponsible(JsonNode constraint) {
+	return constraint != null && constraint.has("type")
+	       && "logAccess".equals(constraint.findValue("type").asText());
+    }
 
-	@Override
-	public Runnable getHandler(JsonNode constraint) {
-		return () -> log.info(constraint.findValue("message").asText());
-
-	}
+    @Override
+    public Runnable getHandler(JsonNode constraint) {
+	return () -> log.info(constraint.findValue("message").asText());
+    }
 }
 ```
 
@@ -1178,16 +1178,16 @@ import time.*
 policy "filter content in collection"
 permit action == "list books"
 obligation
-	{
-		"type" : "jsonContentFilterPredicate",
-		"conditions" : [
-						{
-							"path" : "$.ageRating",
-							"type" : "<=",
-							"value" : timeBetween(subject.birthday, dateOf(|<now>), "years")
-						}
-					   ]
-	}
+    {
+	"type" : "jsonContentFilterPredicate",
+	"conditions" : [
+	                   {
+			       "path" : "$.ageRating",
+                               "type" : "<=",
+                               "value" : timeBetween(subject.birthday, dateOf(|<now>), "years")
+                           }
+                       ]
+    }
 ```
 
 We use the `ContentFilterPredicateProvider` class that is already provided in the SAPL engine. This class can be used to filter a JSON object and extract nodes that match the specified conditions.
@@ -1203,8 +1203,8 @@ public class FilterByAgeProvider implements FilterPredicateConstraintHandlerProv
     @Override
     public boolean isResponsible(JsonNode constraint) {
         return constraint != null && constraint.has("type")
-                && "filterBooksByAge".equals(constraint.findValue("type").asText()) && constraint.has("age")
-                && constraint.get("age").isInt();
+	       && "filterBooksByAge".equals(constraint.findValue("type").asText()) && constraint.has("age")
+               && constraint.get("age").isInt();
     }
 
     @Override
@@ -1232,24 +1232,24 @@ Now log in as Bob, and you will see the following list of books:
 
 ```json
 [
-  {
-    "id": 1,
-    "name": "Clifford: It's Pool Time!",
-    "ageRating": 0,
-    "content": "*Woof*"
-  },
-  {
-    "id": 2,
-    "name": "The Rescue Mission: (Pokemon: Kalos Reader #1)",
-    "ageRating": 4,
-    "content": "Gotta catch 'em all!"
-  },
-  {
-    "id": 3,
-    "name": "Dragonlance Chronicles Vol. 1: Dragons of Autumn Twilight",
-    "ageRating": 9,
-    "content": "Some fantasy story."
-  }
+    {
+        "id": 1,
+        "name": "Clifford: It's Pool Time!",
+        "ageRating": 0,
+        "content": "*Woof*"
+    },
+    {
+        "id": 2,
+        "name": "The Rescue Mission: (Pokemon: Kalos Reader #1)",
+        "ageRating": 4,
+        "content": "Gotta catch 'em all!"
+    },
+    {
+        "id": 3,
+        "name": "Dragonlance Chronicles Vol. 1: Dragons of Autumn Twilight",
+        "ageRating": 9,
+        "content": "Some fantasy story."
+    }
 ]
 ```
 
@@ -1280,23 +1280,24 @@ for action == "read book"
 var birthday    = subject.birthday;
 var today       = time.dateOf(|<time.now>);
 var age         = time.timeBetween(birthday, today, "years");
-	
-	policy "check age transform set"
-	permit
-	where
-		age < resource.ageRating;
-    obligation {
-				"type": "logAccess",
-				"message": "Attention, "+subject.username+" accessed the book '"+resource.name+"'."
-           	   }
-	transform
-    	resource |- {
-        	@.content : blacken(3,0,"\u2588")
+
+    policy "check age transform set"
+    permit
+    where
+        age < resource.ageRating;
+    obligation
+	{
+	    "type": "logAccess",
+	    "message": "Attention, "+subject.username+" accessed the book '"+resource.name+"'."
+	}
+    transform
+	resource |- {
+            @.content : blacken(3,0,"\u2588")
         }
 
-	policy "check age compact set"
-	permit
-		age >= resource.ageRating
+    policy "check age compact set"
+    permit
+	age >= resource.ageRating
 ```
 
 The rules for policies of a set are the same as for top-level policies. So the `where` keyword is optional, as you can see in the second policy of the set. If you use the optional keyword, the line must also end with a `;` as usual.
