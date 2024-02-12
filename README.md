@@ -207,7 +207,6 @@ public class BookController {
     Optional<Book> findById(@PathVariable Long id) {
         return repository.findById(id);
     }
-
 }
 ```
 
@@ -227,7 +226,6 @@ public class LibraryUser extends User {
         super(username, password, true, true, true, true, List.of());
         this.birthday=birthday;
     }
-
 }
 ```
 
@@ -255,7 +253,6 @@ public class LibraryUserDetailsService implements UserDetailsService {
         }
         return new LibraryUser(user.getUsername(), user.getBirthday(), user.getPassword());
     }
-
 }
 ```
 
@@ -329,7 +326,6 @@ public class DemoData implements CommandLineRunner {
         // @formatter:on
         return users;
     }
-
 }
 ```
 
@@ -964,6 +960,7 @@ To have some more data to work with, extend the domain model by adding some cont
 @NoArgsConstructor
 @AllArgsConstructor
 public class Book {
+
     @Id
     Long id;
     String name;
