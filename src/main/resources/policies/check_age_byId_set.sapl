@@ -1,0 +1,27 @@
+import time.*
+import filter.*
+
+set "check age set"
+first-applicable
+for action == "read book"
+var birthday    = subject.birthday;
+var today       = dateOf(|<now>);
+var age         = timeBetween(birthday, today, "years");
+	
+	policy "check age transform set"
+	permit
+	where
+		age < resource.ageRating;
+	obligation 
+		{
+				"type": "logAccess",
+				"message": "Attention, "+subject.username+" accessed the book '"+resource.name+"'."
+		}
+	transform
+    	resource |- {
+        	@.content : blacken(3,0,"\u2588")
+        }
+
+	policy "check age compact set"
+	permit
+		age >= resource.ageRating
