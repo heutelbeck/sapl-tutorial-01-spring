@@ -258,7 +258,7 @@ public class LibraryUserDetailsService implements UserDetailsService {
 
 ### Create a Configurations class
 
-Create a `SecurityConfiguration` class with the Lombok annotations `@Configuration` and `@EnableWebSecurity`. This class provides methods that are automatically processed in the context of Spring Security.
+Create a `SecurityConfiguration` class with the annotations `@Configuration` and `@EnableWebSecurity`. This class provides methods that are automatically processed in the context of Spring Security.
 
 ```java
 @Configuration
@@ -358,13 +358,13 @@ After the application starts, go to <http://localhost:8080/api/books>. The brows
 ]
 ```
 
-So far, this tutorial has not used any features of SAPL, and you just created a basic Spring Boot application. Note that we did not explicitly add any dependency on Spring Security. The SAPL Spring integration has a transitive dependency on Spring Security, which activated it for the application.
+So far, this tutorial has not used any SAPL features, and you just created a basic Spring Boot application. Just so you know, we did not explicitly add any dependency on Spring Security. The SAPL Spring integration has a transitive dependency on Spring Security, which activated it for the application.
 
 ## Securing Repository Methods with SAPL
 
 ### Setting Up Method Security
 
-SAPL extends the Spring Security framework's method security features. To activate SAPL's method security for single decisions, add the `@EnableSaplMethodSecurity` Lombok annotation to your `SecurityConfiguration` class.
+SAPL extends the Spring Security framework's method security features. To activate SAPL's method security for single decisions, add the `@EnableSaplMethodSecurity` annotation to your `SecurityConfiguration` class.
 
 ```java
 @Configuration
