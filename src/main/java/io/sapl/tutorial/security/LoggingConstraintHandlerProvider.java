@@ -2,8 +2,9 @@ package io.sapl.tutorial.security;
 
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
+import io.sapl.api.model.ObjectValue;
+import io.sapl.api.model.TextValue;
+import io.sapl.api.model.Value;
 import io.sapl.spring.constraints.api.RunnableConstraintHandlerProvider;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,15 +18,19 @@ public class LoggingConstraintHandlerProvider implements RunnableConstraintHandl
 	}
 
 	@Override
-	public boolean isResponsible(JsonNode constraint) {
-		return constraint != null && constraint.has("type")
-				&& "logAccess".equals(constraint.findValue("type").asText());
+	public boolean isResponsible(Value constraint) {
+		if (!(constraint instanceof ObjectValue obj)) {
+			return false;
+		}
+		return obj.get("type") instanceof TextValue type && "logAccess".equals(type.value());
 	}
 
 	@Override
-	public Runnable getHandler(JsonNode constraint) {
-		return () -> log.info(constraint.findValue("message").asText());
-
+	public Runnable getHandler(Value constraint) {
+		if (constraint instanceof ObjectValue obj && obj.get("message") instanceof TextValue message) {
+			return () -> log.info(message.value());
+		}
+		return () -> log.info("Access logged");
 	}
 
 }

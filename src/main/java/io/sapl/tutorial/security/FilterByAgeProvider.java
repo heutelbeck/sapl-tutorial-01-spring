@@ -4,8 +4,10 @@ import java.util.function.Predicate;
 
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
+import io.sapl.api.model.NumberValue;
+import io.sapl.api.model.ObjectValue;
+import io.sapl.api.model.TextValue;
+import io.sapl.api.model.Value;
 import io.sapl.spring.constraints.api.FilterPredicateConstraintHandlerProvider;
 import io.sapl.tutorial.domain.Book;
 
@@ -13,21 +15,24 @@ import io.sapl.tutorial.domain.Book;
 public class FilterByAgeProvider implements FilterPredicateConstraintHandlerProvider {
 
     @Override
-    public boolean isResponsible(JsonNode constraint) {
-        return constraint != null && constraint.has("type")
-                && "filterBooksByAge".equals(constraint.findValue("type").asText()) && constraint.has("age")
-                && constraint.get("age").isNumber();
+    public boolean isResponsible(Value constraint) {
+        if (!(constraint instanceof ObjectValue obj)) {
+            return false;
+        }
+        return obj.get("type") instanceof TextValue type
+                && "filterBooksByAge".equals(type.value())
+                && obj.get("age") instanceof NumberValue;
     }
 
     @Override
-    public Predicate<Object> getHandler(JsonNode constraint) {
+    public Predicate<Object> getHandler(Value constraint) {
         return o -> {
-            var age = constraint.get("age").asInt();
-            if (o instanceof Book book) {
-                return age >= book.getAgeRating();
-            } else {
-                return true;
+            if (constraint instanceof ObjectValue obj && obj.get("age") instanceof NumberValue age) {
+                if (o instanceof Book book) {
+                    return age.value().intValue() >= book.getAgeRating();
+                }
             }
+            return true;
         };
     }
 

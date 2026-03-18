@@ -1,6 +1,8 @@
-import time.*
+import time.dateOf
+import time.timeBetween
 policy "filter content in collection"
-permit action == "list books"
+permit
+    action == "list books";
 obligation
 	{
 		"type" : "jsonContentFilterPredicate",
@@ -8,7 +10,7 @@ obligation
 						{
 							"path" : "$.ageRating",
 							"type" : "<=",
-							"value" : timeBetween(subject.birthday, dateOf(|<now>), "years")
+							"value" : timeBetween(subject.birthday, dateOf(|<time.now>), "years")
 						}
 					   ]
 	}
