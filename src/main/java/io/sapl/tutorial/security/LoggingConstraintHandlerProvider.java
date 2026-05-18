@@ -1,36 +1,38 @@
 package io.sapl.tutorial.security;
 
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 
-import io.sapl.api.model.ObjectValue;
-import io.sapl.api.model.TextValue;
 import io.sapl.api.model.Value;
-import io.sapl.spring.constraints.api.RunnableConstraintHandlerProvider;
+import io.sapl.spring.pep.constraints.ConstraintHandler.Runner;
+import io.sapl.spring.pep.constraints.ConstraintHandlerProvider;
+import io.sapl.spring.pep.constraints.ScopedConstraintHandler;
+import io.sapl.spring.pep.constraints.Signal.DecisionSignal;
+import io.sapl.spring.pep.constraints.SignalType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class LoggingConstraintHandlerProvider implements RunnableConstraintHandlerProvider {
+public class LoggingConstraintHandlerProvider implements ConstraintHandlerProvider {
 
-	@Override
-	public Signal getSignal() {
-		return Signal.ON_DECISION;
-	}
+    private static final String CONSTRAINT_TYPE  = "logAccess";
+    private static final int    DEFAULT_PRIORITY = 50;
 
-	@Override
-	public boolean isResponsible(Value constraint) {
-		if (!(constraint instanceof ObjectValue obj)) {
-			return false;
-		}
-		return obj.get("type") instanceof TextValue type && "logAccess".equals(type.value());
-	}
+    @Override
+    public List<ScopedConstraintHandler> getConstraintHandlers(Value constraint, Set<SignalType> supportedSignals) {
+        var signalOpt = ConstraintHandlerProvider.constraintTypeAndSignal(constraint, CONSTRAINT_TYPE,
+                supportedSignals, DecisionSignal.SIGNAL_TYPE);
+        if (signalOpt.isEmpty()) {
+            return List.of();
+        }
+        Runner runner = runnerFor(constraint);
+        return List.of(new ScopedConstraintHandler(runner, signalOpt.get(), DEFAULT_PRIORITY));
+    }
 
-	@Override
-	public Runnable getHandler(Value constraint) {
-		if (constraint instanceof ObjectValue obj && obj.get("message") instanceof TextValue message) {
-			return () -> log.info(message.value());
-		}
-		return () -> log.info("Access logged");
-	}
-
+    private static Runner runnerFor(Value constraint) {
+        var message = ConstraintHandlerProvider.stringField(constraint, "message").orElse("Access logged");
+        return () -> log.info(message);
+    }
 }

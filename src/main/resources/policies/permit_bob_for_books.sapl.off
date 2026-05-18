@@ -1,4 +1,4 @@
 policy "only bob may see individual book entries"
-permit action.java.name == "findById" & action.java.declaringTypeName =~ ".*BookRepository$"
-where
-  subject.name == "bob";
+permit
+    action.java.name == "findById" & action.java.declaringTypeName =~ ".*BookRepository$";
+    subject.name == "bob";

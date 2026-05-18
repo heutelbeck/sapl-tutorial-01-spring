@@ -1,0 +1,7 @@
+policy "check age"
+permit
+    action == "read book";
+    var birthday  = subject.birthday;
+    var today     = time.dateOf(|<time.now>);
+    var age       = time.timeBetween(birthday, today, "years");
+    age >= resource.ageRating;

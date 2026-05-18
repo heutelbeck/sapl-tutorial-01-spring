@@ -1,8 +1,8 @@
 {
-	"algorithm": {
-		"votingMode": "PRIORITY_PERMIT",
-		"defaultDecision": "DENY",
-		"errorHandling": "ABSTAIN"
-	},
-	"variables": {}
+    "algorithm": {
+        "votingMode": "PRIORITY_DENY",
+        "defaultDecision": "DENY",
+        "errorHandling": "PROPAGATE"
+    },
+    "variables": {}
 }

@@ -3,18 +3,18 @@ io.sapl.pdp:
 # pdp-config-type may be RESOURCES (loading policies and configuration from bundles resources) 
 # or FILESYSTEM (loading policies and configuration from a folder on the filesystem
   embedded:
-    pdp-config-type: RESOURCES
+    pdp-config-type: DIRECTORY
     # defines the path (in resources or filesystem respectively) for the pdp.json file with combining algorithm and variables
-    config-path: /policies
+    config-path: /home/dominic/git/sapl-tutorial-01-spring/src/main/resources/policies
     # defines the path (in resources or filesystem respectively) containing .sapl files with policies and policy sets
-    policies-path: /policies
+    policies-path: /home/dominic/git/sapl-tutorial-01-spring/src/main/resources/policies
 # The following options enable or disable different levels of logging for decisions.
 #
 # print-trace: true|false This is the most fine-grained explanation of a decision made
 #                         by the PDP each individual calculation step is documented.
 #                         The trace is in JSON format and may become very large.
 #                         Recommended only as a last resort for troubleshooting.
-    print-trace: true
+    print-trace: false
 # print-json-report: true|false This is a JSON report summarizing the applied algorithms
 #                               and results of each evaluated policy (set) in the
 #                               decision-making process. It includes lists of all errors and values
@@ -28,7 +28,7 @@ io.sapl.pdp:
 #                                  printing JSON during reporting and tracing.
 #                                  If it is intended to copy&paste JSON from the console-log
 #                                  it is recommended to keep this turned off.
-    pretty-print-reports: false
+    pretty-print-reports: true
     
 # The context path and port to use for this demo application
 # (http://localhost:8080)
@@ -39,9 +39,10 @@ server:
 spring:
   # do not show the default spring banner
   main.banner-mode: off
-  jpa.open-in-view: false  
+  jpa.open-in-view: false
+  devtools.restart.enabled: false
 # Set the log level to DEBUG or TRACE to get detailed information about the
 # policy engine decision process.
 logging.level:
-  "[io.sapl]": TRACE
+  "[io.sapl]": DEBUG
   "[org.springframework]": WARN

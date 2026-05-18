@@ -1,5 +1,6 @@
 package io.sapl.tutorial.rest;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,7 @@ public class BookController {
     private final BookRepository repository;
 
     @GetMapping("/api/books")
-    Iterable<Book> findAll() {
+    List<Book> findAll() {
         return repository.findAll();
     }
 
