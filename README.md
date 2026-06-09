@@ -1,6 +1,6 @@
 # SAPL Spring Security Tutorial
 
-Companion code for the [Spring Security with SAPL](https://sapl.io/scenarios/spring/) scenario on sapl.io.
+Companion code for the [Spring Security with SAPL](https://sapl.io/guides/spring/) scenario on sapl.io.
 
 This project demonstrates how to secure a Spring Boot application with attribute-based access control (ABAC) using SAPL. It covers method-level enforcement with `@PreEnforce` and `@PostEnforce`, policy-based data filtering, and integration with the embedded PDP.
 
@@ -26,7 +26,7 @@ The application starts on `http://localhost:8080`.
 
 ## Learn More
 
-- [Full tutorial walkthrough](https://sapl.io/scenarios/spring/)
+- [Full tutorial walkthrough](https://sapl.io/guides/spring/)
 - [SAPL Documentation](https://sapl.io/docs/latest/)
 - [SAPL Playground](https://playground.sapl.io/)
-- [All scenarios](https://sapl.io/scenarios/)
+- [All scenarios](https://sapl.io/guides/)
