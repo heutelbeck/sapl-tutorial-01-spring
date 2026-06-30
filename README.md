@@ -1,12 +1,12 @@
 # SAPL Spring Security Tutorial
 
-Companion code for the [Spring Security with SAPL](https://sapl.io/guides/spring/) scenario on sapl.io.
+Companion code for the [Spring Security with SAPL](https://sapl.io/guides/spring/) guide on sapl.io.
 
 This project demonstrates how to secure a Spring Boot application with attribute-based access control (ABAC) using SAPL. It covers method-level enforcement with `@PreEnforce` and `@PostEnforce`, policy-based data filtering, and integration with the embedded PDP.
 
 ## Prerequisites
 
-- JDK 17+
+- JDK 21+
 - Maven 3.9+
 
 ## Build and Run
